@@ -13,7 +13,7 @@ import model.Estudiante;
 public class RegistroEstudianteView {
     private GestorCitas gestorCitas = new GestorCitas();
 
-    public void mostrar(String s) {
+    public void mostrar() {
         Stage stage = new Stage();
         stage.setTitle("Registro de Estudiantes");
 
