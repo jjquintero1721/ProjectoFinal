@@ -15,6 +15,16 @@ public class Psicologo {
 
     // Horarios separados por comas, por ejemplo: "10:00,11:00"
     private String horariosDisponibles;
+    public Psicologo(){
+
+    }
+
+    public Psicologo(Long id, String nombre, String especialidad, String horariosDisponibles) {
+        this.id = id;
+        this.nombre = nombre;
+        this.especialidad = especialidad;
+        this.horariosDisponibles = horariosDisponibles;
+    }
 
     public Long getId() {
         return id;
@@ -46,6 +56,16 @@ public class Psicologo {
 
     public void setHorariosDisponibles(String horariosDisponibles) {
         this.horariosDisponibles = horariosDisponibles;
+    }
+
+    @Override
+    public String toString() {
+        return "Psicologo{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", especialidad='" + especialidad + '\'' +
+                ", horariosDisponibles='" + horariosDisponibles + '\'' +
+                '}';
     }
 }
 

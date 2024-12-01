@@ -12,7 +12,11 @@ public class PsicologoRepository {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(psicologo);
+            if (psicologo.getId() == null) {
+                em.persist(psicologo); // Persist para nuevas entidades
+            } else {
+                em.merge(psicologo); // Merge para entidades existentes
+            }
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
@@ -23,6 +27,7 @@ public class PsicologoRepository {
             em.close();
         }
     }
+
 
     public List<Psicologo> obtenerTodos() {
         EntityManager em = JPAUtil.getEntityManager();

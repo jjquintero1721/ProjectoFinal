@@ -11,6 +11,7 @@ import model.Estudiante;
 import model.Psicologo;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class RegistroCitaView {
@@ -35,29 +36,30 @@ public class RegistroCitaView {
         btnRegistrar.setOnAction(e -> {
             Estudiante estudianteSeleccionado = cbEstudiantes.getValue();
             Psicologo psicologoSeleccionado = cbPsicologos.getValue();
-            String fechaHora = txtFechaHora.getText();
+            String fechaHoraTexto = txtFechaHora.getText();
 
-            if (estudianteSeleccionado == null || psicologoSeleccionado == null || fechaHora.isEmpty()) {
+            if (estudianteSeleccionado == null || psicologoSeleccionado == null || fechaHoraTexto.isEmpty()) {
                 mostrarMensaje("Por favor, complete todos los campos.");
                 return;
             }
 
-            // Verificar disponibilidad del psicólogo
-            if (!gestorCitas.verificarDisponibilidadPsicologo(psicologoSeleccionado.getNombre(), fechaHora)) {
-                mostrarMensaje("El psicólogo seleccionado no está disponible en el horario indicado.");
-                return;
+            try {
+                LocalDateTime fechaHora = LocalDateTime.parse(fechaHoraTexto);
+                Cita nuevaCita = new Cita();
+                nuevaCita.setEstudiante(estudianteSeleccionado);
+                nuevaCita.setPsicologo(psicologoSeleccionado);
+                nuevaCita.setFechaHora(fechaHora);
+
+                gestorCitas.registrarCita(nuevaCita);
+                mostrarMensaje("Cita registrada exitosamente.");
+                stage.close();
+            } catch (IllegalArgumentException ex) {
+                mostrarMensaje(ex.getMessage());
+            } catch (DateTimeParseException ex) {
+                mostrarMensaje("El formato de fecha y hora es incorrecto. Use el formato: YYYY-MM-DDTHH:MM");
             }
-
-            // Crear y registrar la cita
-            Cita nuevaCita = new Cita();
-            nuevaCita.setEstudiante(estudianteSeleccionado);
-            nuevaCita.setPsicologo(psicologoSeleccionado);
-            nuevaCita.setFechaHora(LocalDateTime.parse(fechaHora));
-            gestorCitas.registrarCita(nuevaCita);
-
-            mostrarMensaje("Cita registrada exitosamente.");
-            stage.close();
         });
+
 
         // Layout
         VBox layout = new VBox(10, lblTitulo, cbEstudiantes, cbPsicologos, txtFechaHora, btnRegistrar);
